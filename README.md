@@ -1,6 +1,8 @@
 # ProjetoDEVAprendiz
 Este é um projeto que fiz para o Projeto DEV aprendiz da empresa em que trabalho. 
 
+Este é o meu primeiro projeto, primeira vez inclusive usando a ferramenta github. 
+
 Foi um grande desafio devido ao prazo estipulado, associar isso com a rotina de trabalho e treinos foi um baita desafio. 
 
 Além disso, tive que aprender a usar novas tecnologias como ASP NET CORE e o Entity, que até então eu só tinha ouvido falar e não havia utilziado ainda. 

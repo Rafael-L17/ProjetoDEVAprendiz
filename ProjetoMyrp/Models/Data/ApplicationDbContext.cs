@@ -1,17 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProjetoMyrp.Models;
 
-namespace ProjetoMyrp.Data
+namespace ProjetoMyrp.Models.Data;
+
+public class ApplicationDbContext : DbContext
 {
-    public class ApplicationDbContext : DbContext
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
-        }
-
-        public DbSet<Cliente> Clientes { get; set; }
-        public DbSet<Produto> Produtos { get; set; }
-        public DbSet<Venda> Vendas { get; set; }
     }
+
+    public DbSet<Cliente> Clientes { get; set; }
+    public DbSet<Produto> Produtos { get; set; }
+    public DbSet<Venda> Vendas { get; set; }
 }

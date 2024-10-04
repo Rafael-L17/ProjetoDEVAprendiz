@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetoMyrp", "ProjetoMyrp\ProjetoMyrp.csproj", "{F445FEB7-7DC6-48D7-A92A-47B9648DD062}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjetoMyrp", "ProjetoMyrp/ProjetoMyrp.csproj", "{1610D6D9-F456-4D58-A4F5-25C7A8648EFE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F445FEB7-7DC6-48D7-A92A-47B9648DD062}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F445FEB7-7DC6-48D7-A92A-47B9648DD062}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F445FEB7-7DC6-48D7-A92A-47B9648DD062}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F445FEB7-7DC6-48D7-A92A-47B9648DD062}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1610D6D9-F456-4D58-A4F5-25C7A8648EFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1610D6D9-F456-4D58-A4F5-25C7A8648EFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1610D6D9-F456-4D58-A4F5-25C7A8648EFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1610D6D9-F456-4D58-A4F5-25C7A8648EFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

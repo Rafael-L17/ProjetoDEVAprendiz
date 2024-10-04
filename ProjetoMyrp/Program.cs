@@ -3,7 +3,7 @@ using ProjetoMyrp.Models.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var sqlConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var sqlConnectionString = builder.Configuration.GetConnectionString("ConnectionString");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(sqlConnectionString));
 builder.Services.AddControllersWithViews();
 

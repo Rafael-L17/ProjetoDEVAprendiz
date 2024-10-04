@@ -17,16 +17,11 @@ public class ProdutoesController(ApplicationDbContext context) : Controller
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null)
-        {
             return NotFound();
-        }
 
-        var produto = await context.Produtos
-            .FirstOrDefaultAsync(m => m.Id == id);
+        var produto = await context.Produtos.FirstOrDefaultAsync(m => m.Id == id);
         if (produto == null)
-        {
             return NotFound();
-        }
 
         return View(produto);
     }
@@ -41,28 +36,24 @@ public class ProdutoesController(ApplicationDbContext context) : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Id,Nome,Preco,QuantidadeEmEstoque")] Produto produto)
     {
-        if (ModelState.IsValid)
-        {
-            context.Add(produto);
-            await context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-        return View(produto);
+        if (!ModelState.IsValid)
+            return View(produto);
+
+        context.Add(produto);
+        await context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
     }
 
     [HttpGet]
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
-        {
             return NotFound();
-        }
-
+        
         var produto = await context.Produtos.FindAsync(id);
         if (produto == null)
-        {
             return NotFound();
-        }
+        
         return View(produto);
     }
     
@@ -71,48 +62,29 @@ public class ProdutoesController(ApplicationDbContext context) : Controller
     public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Preco,QuantidadeEmEstoque")] Produto produto)
     {
         if (id != produto.Id)
-        {
             return NotFound();
-        }
 
-        if (ModelState.IsValid)
-        {
-            try
-            {
-                context.Update(produto);
-                await context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProdutoExists(produto.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return RedirectToAction(nameof(Index));
-        }
-        return View(produto);
+        if (!ModelState.IsValid)
+            return View(produto);
+
+        if (!ProdutoExists(produto.Id))
+            return NotFound();
+
+        context.Update(produto);
+        await context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
     }
 
     [HttpGet]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
-        {
             return NotFound();
-        }
 
-        var produto = await context.Produtos
-            .FirstOrDefaultAsync(m => m.Id == id);
+        var produto = await context.Produtos.FirstOrDefaultAsync(m => m.Id == id);
         if (produto == null)
-        {
             return NotFound();
-        }
-
+        
         return View(produto);
     }
 

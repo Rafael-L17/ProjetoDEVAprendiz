@@ -50,29 +50,22 @@ public class VendasController(ApplicationDbContext context) : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Id,ProdutoId,ClienteId,Quantidade,DataVenda")] Venda venda)
     {
-        if (ModelState.IsValid)
+        var produto = await context.Produtos.FindAsync(venda.ProdutoId);
+        if (produto == null)
         {
-            var produto = await context.Produtos.FindAsync(venda.ProdutoId);
-            if (produto == null)
-            {
-                ModelState.AddModelError("", "Produto não encontrado.");
-                // Recarregar os dados dos dropdowns e retornar a view com os erros
-                ViewData["ClienteId"] = new SelectList(context.Clientes, "Id", "CPFouCNPJ", venda.ClienteId);
-                ViewData["ProdutoId"] = new SelectList(context.Produtos, "Id", "Nome", venda.ProdutoId);
-                return View(venda);
-            }
-            
-            venda.Produto = produto;
-            
-            context.Add(venda);
-            await context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            ModelState.AddModelError("", "Produto não encontrado.");
+            // Recarregar os dados dos dropdowns e retornar a view com os erros
+            ViewData["ClienteId"] = new SelectList(context.Clientes, "Id", "CPFouCNPJ", venda.ClienteId);
+            ViewData["ProdutoId"] = new SelectList(context.Produtos, "Id", "Nome", venda.ProdutoId);
+            return View(venda);
         }
 
-        // Se o modelo não for válido, recarregar os dados dos dropdowns e retornar a view com erros
-        ViewData["ClienteId"] = new SelectList(context.Clientes, "Id", "CPFouCNPJ", venda.ClienteId);
-        ViewData["ProdutoId"] = new SelectList(context.Produtos, "Id", "Nome", venda.ProdutoId);
-        return View(venda);
+        produto.QuantidadeEmEstoque -= venda.Quantidade;
+        venda.Produto = produto;
+        
+        context.Add(venda);
+        await context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
     }
 
     [HttpGet]
@@ -104,51 +97,30 @@ public class VendasController(ApplicationDbContext context) : Controller
     public async Task<IActionResult> Edit(int id, [Bind("Id,ProdutoId,ClienteId,Quantidade,DataVenda")] Venda venda)
     {
         if (id != venda.Id)
-        {
             return NotFound();
-        }
+        
+        if (!VendaExists(venda.Id))
+            return NotFound();
 
-        if (ModelState.IsValid)
-        {
-            try
-            {
-                context.Update(venda);
-                await context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!VendaExists(venda.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return RedirectToAction(nameof(Index));
-        }
-        ViewData["ClienteId"] = new SelectList(context.Clientes, "Id", "CPFouCNPJ", venda.ClienteId);
-        ViewData["ProdutoId"] = new SelectList(context.Produtos, "Id", "Nome", venda.ProdutoId);
-        return View(venda);
+        context.Update(venda);
+        await context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
     }
 
     [HttpGet]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
-        {
             return NotFound();
-        }
 
         var venda = await context.Vendas
             .Include(v => v.Cliente)
             .Include(v => v.Produto)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(m => m.Id == id);
+        
         if (venda == null)
-        {
             return NotFound();
-        }
 
         return View(venda);
     }
@@ -157,12 +129,12 @@ public class VendasController(ApplicationDbContext context) : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var venda = await context.Vendas.FindAsync(id);
-        if (venda != null)
-        {
-            context.Vendas.Remove(venda);
-        }
-
+        var venda = await context.Vendas.Include(x => x.Produto).FirstOrDefaultAsync(x => x.Id == id);
+        if (venda == null)
+            return NotFound();
+        
+        venda.Produto.QuantidadeEmEstoque += venda.Quantidade;
+        context.Vendas.Remove(venda);
         await context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
